@@ -1,6 +1,63 @@
-The example is a PNG used in the previous thread (the one showing "QUICKBMS") and attached to this thread.
+# Identifying Compression Algorithms 
 
-#zlib#
+The following is a collection of Compression algorithm headers. This list was compiled to make it easier to visually idenfiy compression algorithms used in firmware.
+
+## Rar
+The RAR file format begins with Rar!
+
+```
+52 61 72 21 1a 07 00 dd f2 da fd fa df 23 1d	  Rar!.........#.
+```
+Which is a break down of the following to describe an Archive Header:
+
+0x6152 - HEAD_CRC
+0x72 - HEAD_TYPE
+0x1A21 - HEAD_FLAGS
+0x0007 - HEAD_SIZE
+Older versions of the RAR file format have a magic number of :
+```
+52 45 7e 5e 1a 07 00 dd f2 da fd fa df 23 1d	  RE~^.........#.
+```
+
+## Tar
+Header of a tar file is 257 bytes, then is padded with NUL bytes to make it fill a 512 byte record. There is no "magic number" in the header, for file identification.
+
+
+Offset   |  Field size  |   Field
+0     |     100  |   File name
+100   |      8   |  File mode
+108   |      8   | Owner's numeric user ID
+116   |      8   | Group's numeric user ID
+124   |      12  |  File size in bytes (octal base)
+136   |      12  |  Last modification time in numeric Unix time format (octal)
+148   |      8   | Checksum for header record
+156   |      1   | Link indicator (file type)
+157   |      100 |   Name of linked file
+
+
+```
+76 65 72 69 6e 66 6f 2e 69 6e 69 00 00 00 00 00	 verinfo.ini.....
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00	 ................
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00	 ................
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00	 ................
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00	 ................
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+00 00 00 00 30 31 30 30 37 37 37 00 30 30 30 00  ....0100777.000
+```
+
+
+## 7zip 
+The 7Zip \*.7z file format starts with a 7z
+
+```
+37 7a bc af 27 1c 00 04 f4 80 6a 5c 13 02 00 00  	7z..'.....j\....
+00 00 00 00 62 00 00 00 00 00 00 00 1f aa 53 4b  	....b.........SK
+e0 06 a7 02 0b 5d 00 2d 91 89 90 b3 b8 7e 4c d7 	.....].-.....~L.
+2f 3a c6 22 df 09 b3 44 99 89 bf 75 c9 d0 36 81 	/:."...D...u..6.
+```
+
+
+## zlib
 It starts with 0x78 (rarely also with 0x58).
 Use offzip to test if it's really zlib.
 ```
@@ -10,7 +67,7 @@ Use offzip to test if it's really zlib.
 65 84 a5 cd 4a 26 eb 2a 76 d9 64 5e 32 87 a7 bc   e...J&.*v.d^2...
 ```
 
-#deflate#
+## deflate
 Usually starts with 0xe*.
 Use "offzip -z -15" to test if it's really deflate.
 ```
@@ -20,7 +77,7 @@ a2 76 d0 32 d7 cd a8 b9 72 a9 1d 2d fd 60 65 84   .v.2....r..-.`e.
 a5 cd 4a 26 eb 2a 76 d9 64 5e 32 87 a7 bc 2c 69   ..J&.*v.d^2...,i
 ```
 
-#lzo1x#
+## lzo1x
 Parts of the original data are uncompressed.
 ```
 25 89 50 4e 47 0d 0a 1a 0a 00 00 00 0d 49 48 44   %.PNG........IHD
@@ -29,7 +86,7 @@ Parts of the original data are uncompressed.
 01 95 2b 0e 1b 00 00 07 81 49 44 41 54 78 da ed   ..+......IDATx..
 ```
 
-#lzss#
+## lzss
 Parts of the original data uncompressed.
 ```
 ff 89 50 4e 47 0d 0a 1a 0a ff 00 00 00 0d 49 48   ..PNG.........IH
@@ -38,7 +95,7 @@ ff 89 50 4e 47 0d 0a 1a 0a ff 00 00 00 0d 49 48   ..PNG.........IH
 01 ff 95 2b 0e 1b 00 00 07 81 ff 49 44 41 54 78   ...+.......IDATx
 ```
 
-#Xmemcompress / LZX#
+## Xmemcompress / LZX
 Usually it starts with 0xff.
 There are also some file formats created with the xbcompress tool, they start with 0x0F 0xF5 0x12 0xEE (lzx native) or 0x0F 0xF5 0x12 0xED (lzx decode).
 ```
@@ -48,7 +105,7 @@ ff 07 cf 03 4a 00 10 f3 7c 00 00 42 00 50 22 00   ....J...|..B.P".
 7b cc 73 26 2a 81 59 4f 89 2e 4a 11 da 90 31 03   {.s&*.YO..J...1.
 ```
 
-#Bzip2#
+## Bzip2
 Fixed signature, BZh91.
 ```
 42 5a 68 39 31 41 59 26 53 59 c3 87 b9 ea 00 02   BZh91AY&SY......
@@ -57,7 +114,7 @@ fe ff ff f8 fd 7f fb 7f bf df fb ff b5 f7 bf 9f   ................
 ff ff ff c0 02 9c 1a cc db 02 2a 90 d0 d0 1a 03   ..........*.....
 ```
 
-#gzip#
+## gzip
 0x1f 0x8b, note that usually it contains deflate data, rarely lzma and some rare games use also other types of compressions (quickbms automatically handles all of them).
 ```
 1f 8b 08 00 00 00 00 00 00 00 eb 0c f0 73 e7 e5   .............s..
@@ -66,7 +123,7 @@ ff ff ff c0 02 9c 1a cc db 02 2a 90 d0 d0 1a 03   ..........*.....
 03 df 11 10 66 9c aa cd 27 cd c0 c0 de e8 e9 e2   ....f...'.......
 ```
 
-#JCalg#
+## JCalg
 It starts with JC.
 ```
 4a 43 cf 07 00 00 84 a9 56 bb 14 6a e2 20 15 36   JC......V..j. .6
@@ -75,7 +132,7 @@ It starts with JC.
 d0 dc 95 03 4a 00 81 8d 96 95 49 03 1f 24 97 6a   ....J.....I..$.j
 ```
 
-#LZMA#
+## LZMA
 0x5d at the beginning (it's a flag), a 32bit field (size of the dictionary) and the lzma data.
 The raw lzma stream usually starts with a 0x00 (offset 0x5)
 Note: if you use "comptype lzma_compress" in QuickBMS to compress data, your output will start with 0x2c instead of 0x5d, I modified the dump to make everything easier for you.
@@ -86,7 +143,7 @@ Note: if you use "comptype lzma_compress" in QuickBMS to compress data, your out
 38 74 b0 3d 19 ab 33 0c 73 57 75 94 da 8a ac 7e   8t.=..3.sWu....~
 ```
 
-#lzma 86 head#
+## lzma 86 head
 As before with a 64bit uncompressed size field before the compressed data.
 ```
 5d 00 00 00 08 cf 07 00 00 00 00 00 00 00 44 94   ].............D.
@@ -95,7 +152,7 @@ a6 b1 a9 14 37 65 03 e8 61 4e b5 0a 29 f7 bc f4   ....7e..aN..)...
 3f 2f a1 6a c9 03 2d 24 38 74 b0 3d 19 ab 33 0c   ?/.j..-$8t.=..3.
 ```
 
-#lzma 86 dec#
+## lzma 86 dec
 One byte more than lzma.
 ```
 5d 00 00 00 08 00 00 44 94 a6 b1 a9 14 37 65 03   ]......D.....7e.
@@ -104,7 +161,7 @@ e8 61 4e b5 0a 29 f7 bc f4 0a 39 10 76 ec 9c fe   .aN..)....9.v...
 24 38 74 b0 3d 19 ab 33 0c 73 57 75 94 da 8a ac   $8t.=..3.sWu....
 ```
 
-#lzma 86 dec head#
+## lzma 86 dec head
 All the fields seen before.
 ```
 5d 00 00 00 08 00 cf 07 00 00 00 00 00 00 00 44   ]..............D
@@ -113,7 +170,7 @@ f4 0a 39 10 76 ec 9c fe 41 1a 6a 07 81 ce e1 e0   ..9.v...A.j.....
 58 3f 2f a1 6a c9 03 2d 24 38 74 b0 3d 19 ab 33   X?/.j..-$8t.=..3
 ```
 
-#lzma efs#
+## lzma efs
 Used by the ZIP file format.
 ```
 5d 00 00 00 08 00 00 05 00 00 44 94 a6 b1 a9 14   ].........D.....
@@ -122,7 +179,7 @@ ec 9c fe 41 1a 6a 07 81 ce e1 e0 58 3f 2f a1 6a   ...A.j.....X?/.j
 c9 03 2d 24 38 74 b0 3d 19 ab 33 0c 73 57 75 94   ..-$8t.=..3.sWu.
 ```
 
-#lzma without prop / headerless#
+## lzma without prop / headerless
 ```
 00 44 94 a6 b1 a9 14 37 65 03 e8 61 4e b5 0a 29   .D.....7e..aN..)
 f7 bc f4 0a 39 10 76 ec 9c fe 41 1a 6a 07 81 ce   ....9.v...A.j...
@@ -130,7 +187,7 @@ e1 e0 58 3f 2f a1 6a c9 03 2d 24 38 74 b0 3d 19   ..X?/.j..-$8t.=.
 ab 33 0c 73 57 75 94 da 8a ac 7e 5d 55 f3 19 4d   .3.sWu....~]U..M
 ```
 
-#RNC#
+## RNC
 "RNC" magic, version (1 and 2), uncompressed size.
 ```
 52 4e 43 01 00 00 07 cf 00 00 03 06 d5 26 b5 99   RNC..........&..
@@ -139,7 +196,7 @@ ab 33 0c 73 57 75 94 da 8a ac 7e 5d 55 f3 19 4d   .3.sWu....~]U..M
 00 0d 49 48 44 52 00 00 01 f4 5f 2d 08 02 02 01   ..IHDR...._-....
 ```
 
-#Zpaq#
+## Zpaq
 "zPQ" magic, currently I have never seen this compression used in games.
 ```
 7a 50 51 01 01 c4 00 05 09 00 00 16 01 a0 03 05   zPQ.............
@@ -148,7 +205,7 @@ ab 33 0c 73 57 75 94 da 8a ac 7e 5d 55 f3 19 4d   .3.sWu....~]U..M
 03 0e 07 10 00 0f 18 ff 07 08 00 10 0a ff 06 00   ................
 ```
 
-#Snappy#
+## Snappy
 Uncompressed size before the data.
 ```
 cf 0f 4c 89 50 4e 47 0d 0a 1a 0a 00 00 00 0d 49   ..L.PNG........I
@@ -157,7 +214,7 @@ b4 48 dd 00 00 00 09 70 48 59 73 00 00 0e c4 01   .H.....pHYs.....
 04 f0 46 01 95 2b 0e 1b 00 00 07 81 49 44 41 54   ..F..+......IDAT
 ```
 
-#Gipfeli#
+## Gipfeli
 Small header with 32bit uncompressed size.
 ```
 02 cf 07 60 00 35 da 0c 80 28 06 40 13 03 75 00   ...`.5...(.@..u.
@@ -166,7 +223,7 @@ Small header with 32bit uncompressed size.
 45 48 2d 00 cc ff 16 80 e6 1a b4 2d 00 07 c0 df   EH-........-....
 ```
 
-#LZG#
+## LZG
 "LZG" magic and uncompressed size.
 ```
 4c 5a 47 00 00 07 cf 00 00 03 26 94 ed 70 6b 01   LZG.......&..pk.
@@ -175,7 +232,7 @@ Small header with 32bit uncompressed size.
 48 dd 24 c1 09 70 48 59 73 00 00 0e c4 24 62 01   H.$..pHYs....$b.
 ```
 
-#Doboz#
+## Doboz
 Small header with uncompressed size.
 ```
 08 cf 07 5a 03 00 00 90 90 89 50 4e 47 0d 0a 1a   ...Z......PNG...
@@ -184,7 +241,7 @@ Small header with uncompressed size.
 00 00 0e c4 06 01 01 95 2b 0e 1b 00 00 07 81 49   ........+......I
 ```
 
-#SFL block#
+## SFL block
 ```
 40 00 00 89 50 4e 47 0d 0a 1a 0a 00 00 00 0d 49   @...PNG........I
 48 44 52 09 08 00 00 01 f4 00 41 08 02 01 20 44   HDR.......A... D
@@ -192,7 +249,7 @@ b4 48 dd 00 70 09 70 48 02 00 59 73 00 00 0e c4   .H..p.pH..Ys....
 00 41 01 95 2b 0e 1b 00 00 07 81 00 00 49 44 41   .A..+........IDA
 ```
 
-#SFL bits#
+## SFL bits
 ```
 0f 89 50 4e 47 0d 0a 1a 0a 84 0c 0d 49 48 44 52   ..PNG.......IHDR
 83 00 08 f4 83 00 08 f4 03 01 84 0b 44 b4 48 dd   ............D.H.
@@ -200,7 +257,7 @@ b4 48 dd 00 70 09 70 48 02 00 59 73 00 00 0e c4   .H..p.pH..Ys....
 0b 95 2b 0e 1b 83 15 07 81 49 44 41 54 78 da ed   ..+......IDATx..
 ```
 
-#LZF#
+## LZF
 ```
 13 89 50 4e 47 0d 0a 1a 0a 00 00 00 0d 49 48 44   ..PNG........IHD
 52 00 00 01 f4 40 03 01 08 02 20 11 03 44 b4 48   R....@.... ..D.H
@@ -208,7 +265,7 @@ dd 20 06 08 09 70 48 59 73 00 00 0e c4 40 03 1f   . ...pHYs....@..
 01 95 2b 0e 1b 00 00 07 81 49 44 41 54 78 da ed   ..+......IDATx..
 ```
 
-#Brieflz#
+## Brieflz
 ```
 89 00 00 50 4e 47 0d 0a 1a 0a 00 00 00 0d 49 48   ...PNG........IH
 44 52 00 00 10 00 01 f4 03 08 02 00 00 00 44 b4   DR............D.
@@ -216,7 +273,7 @@ dd 20 06 08 09 70 48 59 73 00 00 0e c4 40 03 1f   . ...pHYs....@..
 00 00 03 01 95 2b 0e 1b 00 00 07 81 49 44 41 54   .....+......IDAT
 ```
 
-#Falcom (used in the Ys series)#
+## Falcom (used in the Ys series)
 32bit compressed size at the beginning.
 ```
 3d 03 00 00 89 50 4e 47 0d 0a 1a 0a 0a 4a 00 01   =....PNG.....J..
@@ -225,7 +282,7 @@ dd 20 06 08 09 70 48 59 73 00 00 0e c4 40 03 1f   . ...pHYs....@..
 01 95 2b 0e 1b 09 07 81 49 44 41 54 78 da 00 00   ..+.....IDATx...
 ```
 
-#LZ4#
+## LZ4
 Usually it starts with a 0xf* byte.
 ```
 f0 05 89 50 4e 47 0d 0a 1a 0a 00 00 00 0d 49 48   ...PNG........IH
@@ -234,7 +291,7 @@ b4 48 dd 00 00 00 09 70 48 59 73 00 00 0e c4 04   .H.....pHYs.....
 00 f5 37 01 95 2b 0e 1b 00 00 07 81 49 44 41 54   ..7..+......IDAT
 ```
 
-#Yappy#
+## Yappy
 ```
 1f 89 50 4e 47 0d 0a 1a 0a 00 00 00 0d 49 48 44   ..PNG........IHD
 52 00 00 01 f4 00 00 01 f4 08 02 00 00 00 44 b4   R.............D.
@@ -242,7 +299,7 @@ b4 48 dd 00 00 00 09 70 48 59 73 00 00 0e c4 04   .H.....pHYs.....
 00 0e c4 01 95 2b 0e 1b 00 00 07 81 49 44 41 54   .....+......IDAT
 ```
 
-#NitroSDK (Nintendo)#
+## NitroSDK (Nintendo)
 The first byte is the type of compression: 0x00, 0x10, 0x11, 0x20, 0x40.
 ```
 10 cf 07 00 00 89 50 4e 47 0d 0a 1a 0a 00 00 00   ......PNG.......
@@ -251,15 +308,16 @@ The first byte is the type of compression: 0x00, 0x10, 0x11, 0x20, 0x40.
 0e c4 10 03 01 00 95 2b 0e 1b 00 00 07 81 00 49   .......+.......I
 ```
 
-#LZMA2#
+## LZMA2
 ```
+
 18 e0 07 ce 02 fa 5d 00 44 94 05 c4 7a 27 f6 f7   ......].D...z'..
 ee 89 8e 50 90 88 b3 aa cc 1b 2e 9b 5a d1 1a 08   ...P........Z...
 c2 69 96 f7 ad ab 24 88 1f 78 89 db 47 9f ab 1e   .i....$..x..G...
 d5 ee e0 c1 8b b2 c9 82 e1 c5 12 78 20 65 03 85   ...........x e..
 ```
 
-#LZMA2 headerless#
+## LZMA2 headerless
 ```
 e0 07 ce 02 fa 5d 00 44 94 05 c4 7a 27 f6 f7 ee   .....].D...z'...
 89 8e 50 90 88 b3 aa cc 1b 2e 9b 5a d1 1a 08 c2   ..P........Z....
@@ -267,7 +325,7 @@ e0 07 ce 02 fa 5d 00 44 94 05 c4 7a 27 f6 f7 ee   .....].D...z'...
 ee e0 c1 8b b2 c9 82 e1 c5 12 78 20 65 03 85 04   ..........x e...
 ```
 
-#Oodle#
+## Oodle
 Usually it starts with the byte 0x8c.
 ```
 8c 0b 43 03 61 df 01 00 12 19 83 e0 b4 78 4b e0   ..C.a........xK.
@@ -276,7 +334,7 @@ ab 74 91 77 97 86 13 9d 40 07 b7 d4 0d 76 5c 7d   .t.w....@....v\}
 49 93 f9 fc 4c a6 b7 80 17 a4 bc 8c 07 f9 8d 31   I...L..........1
 ```
 
-#zstd#
+## zstd
 It starts with a little endian 32bit magic number, when seen with a hex editor only the first byte (the low 8bit) is different because it depends by the version of the algorithm:
 ```
 1e b5 2f fd    v0.1
@@ -289,7 +347,10 @@ It starts with a little endian 32bit magic number, when seen with a hex editor o
 28 b5 2f fd    v0.8, current version
 ```
 
-This terrific information came from the following thread on Zenhax.com:
+Sources:
+https://www.forensicswiki.org/wiki/RAR
+https://en.wikipedia.org/wiki/Tar_(computing)
+Much of this terrific information came from the following thread on Zenhax.com:
 http://zenhax.com/viewtopic.php?t=27
 
 

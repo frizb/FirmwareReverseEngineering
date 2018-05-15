@@ -20,7 +20,7 @@ Older versions of the RAR file format have a magic number of :
 ```
 
 ## Tar
-Header of a tar file is 257 bytes, then is padded with NUL bytes to make it fill a 512 byte record. There is no "magic number" in the header, for file identification.
+Header of a tar file is 257 bytes and usally contains a filename, then is padded with NUL bytes to make it fill a 512 byte record. There is no "magic number" in the header, for file identification.
 
 
 |Offset   |  Field size  |   Field|

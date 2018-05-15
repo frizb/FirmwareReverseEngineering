@@ -24,6 +24,7 @@ Header of a tar file is 257 bytes, then is padded with NUL bytes to make it fill
 
 
 |Offset   |  Field size  |   Field|
+| ---     |  ---         |   ---  |
 |0     |     100  |   File name|
 |100   |      8   |  File mode|
 |108   |      8   | Owner's numeric user ID|

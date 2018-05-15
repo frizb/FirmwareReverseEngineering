@@ -23,16 +23,16 @@ Older versions of the RAR file format have a magic number of :
 Header of a tar file is 257 bytes, then is padded with NUL bytes to make it fill a 512 byte record. There is no "magic number" in the header, for file identification.
 
 
-Offset   |  Field size  |   Field
-0     |     100  |   File name
-100   |      8   |  File mode
-108   |      8   | Owner's numeric user ID
-116   |      8   | Group's numeric user ID
-124   |      12  |  File size in bytes (octal base)
-136   |      12  |  Last modification time in numeric Unix time format (octal)
-148   |      8   | Checksum for header record
-156   |      1   | Link indicator (file type)
-157   |      100 |   Name of linked file
+|Offset   |  Field size  |   Field|
+|0     |     100  |   File name|
+|100   |      8   |  File mode|
+|108   |      8   | Owner's numeric user ID|
+|116   |      8   | Group's numeric user ID|
+|124   |      12  |  File size in bytes (octal base)|
+|136   |      12  |  Last modification time in numeric Unix time format (octal)|
+|148   |      8   | Checksum for header record|
+|156   |      1   | Link indicator (file type)|
+|157   |      100 |   Name of linked file|
 
 
 ```

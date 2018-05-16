@@ -154,6 +154,22 @@ d0 dc 95 03 4a 00 81 8d 96 95 49 03 1f 24 97 6a   ....J.....I..$.j
 ```
 
 ## LZMA
+LZMA is a commonly used compression algorithm in firmware and has a wide range of flavours. 
+There is no real magic file number for LZMA as it is not really a file format.  Rather it is a compression algorithm.
+We often the the default LZMA bitflag 0x5d at the start of a LZMA file, but this can change depending on the bit options selected.
+
+The value at offset 3 indicates which of the nine compression modes (1-9) are used:
+
+   1 =>  5d 00 00 **01** 00
+   2 =>  5d 00 00 **10** 00
+   3 =>  5d 00 00 **08** 00
+   4 =>  5d 00 00 **10** 00
+   5 =>  5d 00 00 **20** 00
+   6 =>  5d 00 00 **40** 00
+   7 =>  5d 00 00 **80** 00
+   8 =>  5d 00 00 **00** 01
+   9 =>  5d 00 00 **00** 02
+
 0x5d at the beginning (it's a flag), a 32bit field (size of the dictionary) and the lzma data.
 The raw lzma stream usually starts with a 0x00 (offset 0x5)
 Note: if you use "comptype lzma_compress" in QuickBMS to compress data, your output will start with 0x2c instead of 0x5d, I modified the dump to make everything easier for you.
@@ -164,7 +180,7 @@ Note: if you use "comptype lzma_compress" in QuickBMS to compress data, your out
 38 74 b0 3d 19 ab 33 0c 73 57 75 94 da 8a ac 7e   8t.=..3.sWu....~
 ```
 
-## LZMA XZ Format
+### LZMA XZ Format
 xz is a lossless compression program and file format which incorporates the LZMA/LZMA2 compression algorithms.
 ```
 fd 37 7a 58 5a 00 00 04 e6 d6 b4 46 02 00 21 01  .7zXZ......F..!.
@@ -176,7 +192,7 @@ c3 d2 71 4b 74 db eb 04 c5 9d 35 83 3f 0a fc 78  ..qKt.....5.?..
 ```
 
 
-## lzma 86 head
+### lzma 86 head
 As before with a 64bit uncompressed size field before the compressed data.
 ```
 5d 00 00 00 08 cf 07 00 00 00 00 00 00 00 44 94   ].............D.
@@ -185,7 +201,7 @@ a6 b1 a9 14 37 65 03 e8 61 4e b5 0a 29 f7 bc f4   ....7e..aN..)...
 3f 2f a1 6a c9 03 2d 24 38 74 b0 3d 19 ab 33 0c   ?/.j..-$8t.=..3.
 ```
 
-## lzma 86 dec
+### lzma 86 dec
 One byte more than lzma.
 ```
 5d 00 00 00 08 00 00 44 94 a6 b1 a9 14 37 65 03   ]......D.....7e.
@@ -194,7 +210,7 @@ e8 61 4e b5 0a 29 f7 bc f4 0a 39 10 76 ec 9c fe   .aN..)....9.v...
 24 38 74 b0 3d 19 ab 33 0c 73 57 75 94 da 8a ac   $8t.=..3.sWu....
 ```
 
-## lzma 86 dec head
+### lzma 86 dec head
 All the fields seen before.
 ```
 5d 00 00 00 08 00 cf 07 00 00 00 00 00 00 00 44   ]..............D
@@ -203,7 +219,7 @@ f4 0a 39 10 76 ec 9c fe 41 1a 6a 07 81 ce e1 e0   ..9.v...A.j.....
 58 3f 2f a1 6a c9 03 2d 24 38 74 b0 3d 19 ab 33   X?/.j..-$8t.=..3
 ```
 
-## lzma efs
+### lzma efs
 Used by the ZIP file format.
 ```
 5d 00 00 00 08 00 00 05 00 00 44 94 a6 b1 a9 14   ].........D.....
@@ -212,13 +228,43 @@ ec 9c fe 41 1a 6a 07 81 ce e1 e0 58 3f 2f a1 6a   ...A.j.....X?/.j
 c9 03 2d 24 38 74 b0 3d 19 ab 33 0c 73 57 75 94   ..-$8t.=..3.sWu.
 ```
 
-## lzma without prop / headerless
+### lzma without prop / headerless
 ```
 00 44 94 a6 b1 a9 14 37 65 03 e8 61 4e b5 0a 29   .D.....7e..aN..)
 f7 bc f4 0a 39 10 76 ec 9c fe 41 1a 6a 07 81 ce   ....9.v...A.j...
 e1 e0 58 3f 2f a1 6a c9 03 2d 24 38 74 b0 3d 19   ..X?/.j..-$8t.=.
 ab 33 0c 73 57 75 94 da 8a ac 7e 5d 55 f3 19 4d   .3.sWu....~]U..M
 ```
+
+### LZMA:23 without prop / headerless
+```
+00 44 94 a6 b1 a9 14 37 65 03 e8 61 4e b5 0a 29   .D.....7e..aN..)
+f7 bc f4 0a 39 10 76 ec 9c fe 41 1a 6a 07 81 ce   ....9.v...A.j...
+e1 e0 58 3f 2f a1 6a c9 03 2d 24 38 74 b0 3d 19   ..X?/.j..-$8t.=.
+ab 33 0c 73 57 75 94 da 8a ac 7e 5d 55 f3 19 4d   .3.sWu....~]U..M
+```
+
+
+
+### LZMA2
+```
+
+18 e0 07 ce 02 fa 5d 00 44 94 05 c4 7a 27 f6 f7   ......].D...z'..
+ee 89 8e 50 90 88 b3 aa cc 1b 2e 9b 5a d1 1a 08   ...P........Z...
+c2 69 96 f7 ad ab 24 88 1f 78 89 db 47 9f ab 1e   .i....$..x..G...
+d5 ee e0 c1 8b b2 c9 82 e1 c5 12 78 20 65 03 85   ...........x e..
+```
+
+### LZMA2 headerless
+```
+e0 07 ce 02 fa 5d 00 44 94 05 c4 7a 27 f6 f7 ee   .....].D...z'...
+89 8e 50 90 88 b3 aa cc 1b 2e 9b 5a d1 1a 08 c2   ..P........Z....
+69 96 f7 ad ab 24 88 1f 78 89 db 47 9f ab 1e d5   i....$..x..G....
+ee e0 c1 8b b2 c9 82 e1 c5 12 78 20 65 03 85 04   ..........x e...
+```
+
+
+
 
 ## RNC
 "RNC" magic, version (1 and 2), uncompressed size.
@@ -339,23 +385,6 @@ The first byte is the type of compression: 0x00, 0x10, 0x11, 0x20, 0x40.
 00 0d 49 48 44 52 09 00 00 01 f4 10 03 08 02 00   ..IHDR..........
 11 08 44 b4 48 dd 00 18 09 70 48 02 59 73 00 00   ..D.H....pH.Ys..
 0e c4 10 03 01 00 95 2b 0e 1b 00 00 07 81 00 49   .......+.......I
-```
-
-## LZMA2
-```
-
-18 e0 07 ce 02 fa 5d 00 44 94 05 c4 7a 27 f6 f7   ......].D...z'..
-ee 89 8e 50 90 88 b3 aa cc 1b 2e 9b 5a d1 1a 08   ...P........Z...
-c2 69 96 f7 ad ab 24 88 1f 78 89 db 47 9f ab 1e   .i....$..x..G...
-d5 ee e0 c1 8b b2 c9 82 e1 c5 12 78 20 65 03 85   ...........x e..
-```
-
-## LZMA2 headerless
-```
-e0 07 ce 02 fa 5d 00 44 94 05 c4 7a 27 f6 f7 ee   .....].D...z'...
-89 8e 50 90 88 b3 aa cc 1b 2e 9b 5a d1 1a 08 c2   ..P........Z....
-69 96 f7 ad ab 24 88 1f 78 89 db 47 9f ab 1e d5   i....$..x..G....
-ee e0 c1 8b b2 c9 82 e1 c5 12 78 20 65 03 85 04   ..........x e...
 ```
 
 ## Oodle

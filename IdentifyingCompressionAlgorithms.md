@@ -2,6 +2,26 @@
 
 The following is a collection of Compression algorithm headers. This list was compiled to make it easier to visually idenfiy compression algorithms used in firmware.
 
+## SquashFS
+SquashFS can be easily opened using 7zip.
+```
+00000000  73 68 73 71 7d 02 00 00  00 00 00 54 03 00 00 08  |shsq}......T....|
+00000010  1c 71 b7 a0 12 71 b7 19  1f 73 00 18 03 00 00 00  |.q...q...s......|
+00000020  38 72 10 00 c0 02 01 cf  54 b4 50 d4 0c 1f 10 00  |8r......T.P.....|
+00000030  00 00 00 00 00 01 00 2c  00 00 00 02 00 a2 bf c2  |.......,........|
+00000040  95 25 00 00 00 00 00 b6  95 25 00 00 00 00 00 be  |.%.......%......|
+```
+
+```
+binwalk squashfs.bin
+DECIMAL     HEX         DESCRIPTION
+-------------------------------------------------------------------------------------------------------
+52          0x34        uImage header, header size: 64 bytes, header CRC: 0x1A27096C, created: Tue Nov 27 06:52:32 2012, image size: 3448768 bytes, Data Address: 0x80000000, Entry Point: 0x8023A000, data CRC: 0x584BBD98, OS: Linux, CPU: MIPS, image type: OS Kernel Image, compression type: lzma, image name: "Linux Kernel Image"
+116         0x74        LZMA compressed data, properties: 0x5D, dictionary size: 33554432 bytes, uncompressed size: 2445108 bytes
+983092      0xF0034     Squashfs filesystem, little endian, non-standard signature,  version 3.0, size: 2463170 bytes,  637 inodes, blocksize: 65536 bytes, created: Tue Nov 27 06:51:11 2012 
+```
+
+
 ## Rar
 The RAR file format begins with Rar!
 

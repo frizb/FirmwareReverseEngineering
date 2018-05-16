@@ -58,8 +58,11 @@ root@kali:~/Desktop/1# xxd -l 64 firmware.bin
 00000010: 2c02 0065 b59b b60c 226d 652c b122 d769  ,..e...."me,.".i
 00000020: 18e6 8bf4 5bac cc71 1ed1 62cd 1623 ae7c  ....[..q..b..#.|
 00000030: a3f3 7df1 7dd7 38e5 e1f1 7d04 3002 bdfc  ..}.}.8...}.0...```
+```
+
 If we compare this header to the headers listed in the Identifying Compression Algorithms, we can see  this is an LZMA.
 If the file conforms to a standard LZMA file format, it is easy to extract the data from it:
+
 ```
 root@kali:~/ # lzma -d firmware.bin
 root@kali:~/ #

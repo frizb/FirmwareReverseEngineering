@@ -144,6 +144,18 @@ Note: if you use "comptype lzma_compress" in QuickBMS to compress data, your out
 38 74 b0 3d 19 ab 33 0c 73 57 75 94 da 8a ac 7e   8t.=..3.sWu....~
 ```
 
+## LZMA XZ Format
+xz is a lossless compression program and file format which incorporates the LZMA/LZMA2 compression algorithms.
+```
+fd 37 7a 58 5a 00 00 04 e6 d6 b4 46 02 00 21 01  .7zXZ......F..!.
+16 00 00 00 74 2f e5 a3 e0 32 a7 0f 54 5d 00 26	 ....t/...2..T].&
+1b ca 46 67 5a f2 21 e7 04 34 68 e1 8a 7a 8b dd	 ..FgZ.!..4h..z..
+4d 87 fb c8 fa 50 c6 ff 38 b8 4c e5 4c f5 7a f4	 M....P..8.L.L.z.
+c3 d2 71 4b 74 db eb 04 c5 9d 35 83 3f 0a fc 78  ..qKt.....5.?..
+
+```
+
+
 ## lzma 86 head
 As before with a 64bit uncompressed size field before the compressed data.
 ```

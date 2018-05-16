@@ -1,4 +1,4 @@
-# FirmwareReverseEngineering
+# Firmware Reverse Engineering
 I am by no means an expert at Firmware Reverse engineering. In fact, what I don’t know about Firmware development and reverse engineering could probably fill a library.  However, things that I learn and know I try to keep here for future reference. 
 
 # Firmware Analysis Steps

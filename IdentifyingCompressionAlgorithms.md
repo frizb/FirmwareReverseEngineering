@@ -146,7 +146,9 @@ CPIO (Copy in/out file archives) was originally developed as a tape backup mecha
 The magic number for a CPIO file has traditionally been the following:
 
 070707		cpio archive
+
 0143561		byte-swapped cpio archive
+
 
 However, I found a different header value in the version 2.11 cpio archive program:
 ```
@@ -155,7 +157,9 @@ cpio (GNU cpio) 2.11
 Copyright (C) 2010 Free Software Foundation, Inc.
 ```
 
+
 c7710108    cpio archive version 2.11
+
 
 ```
 c7 71 01 08 65 91 a4 81 00 00 00 00 01 00 00 00  .q..e...........

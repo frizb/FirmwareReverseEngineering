@@ -1,6 +1,7 @@
 # Identifying Compression Algorithms 
 
 The following is a collection of Compression algorithm headers. This list was compiled to make it easier to visually idenfiy compression algorithms used in firmware.
+If you are having trouble identifying a particular compression algorithm, I have found 7zip to be extremely effective at idenfying most every compression algorithm known to man. We do run into odd cases such as non-standard implementations which can lead to many hours of wheel spinning.
 
 
 ## LZMA

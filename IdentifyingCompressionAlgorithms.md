@@ -39,6 +39,26 @@ Note: if you use "comptype lzma_compress" in QuickBMS to compress data, your out
 38 74 b0 3d 19 ab 33 0c 73 57 75 94 da 8a ac 7e   8t.=..3.sWu....~
 ```
 
+### LZMA1 Raw vs LZMA1 Alone
+LZMA1 Raw format drops the bitflag at offset 0 and the other compression information flags.  It appears to simple drop the 13 byte prefix entirely and jump right into the compression. 
+
+LZMA1 Alone
+```
+5d 00 00 80 00 ff ff ff ff ff ff ff ff 00 26 1b	 ].............&.
+ca 46 67 5a f2 21 e7 04 34 68 e1 8a 7a 8b dd 4d	 .FgZ.!..4h..z..M
+87 fb c8 fa 50 c6 ff 38 b8 4c e5 4c f5 7a f4 c3	 ....P..8.L.L.z..
+d2 71 4b 74 db eb 04 c5 9d 35 83 3f 0a fc 78 b5	 .qKt.....5.?..x.
+```
+
+LZMA1 Raw
+```
+00 26 1b ca 46 67 5a f2 21 e7 04 34 68 e1 8a 7a	.&..FgZ.!..4h..z
+8b dd 4d 87 fb c8 fa 50 c6 ff 38 b8 4c e5 4c f5	..M....P..8.L.L.
+7a f4 c3 d2 71 4b 74 db eb 04 c5 9d 35 83 3f 0a	z...qKt.....5.?.
+fc 78 b5 da 20 c0 cb 87 35 42 df 8f ad ff 22 70	.x.. ...5B...."p
+
+```
+
 ### LZMA XZ Format
 xz is a lossless compression program and file format which incorporates the LZMA/LZMA2 compression algorithms.
 ```

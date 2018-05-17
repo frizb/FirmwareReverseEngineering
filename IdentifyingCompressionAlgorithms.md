@@ -140,6 +140,30 @@ DECIMAL     HEX         DESCRIPTION
 983092      0xF0034     Squashfs filesystem, little endian, non-standard signature,  version 3.0, size: 2463170 bytes,  637 inodes, blocksize: 65536 bytes, created: Tue Nov 27 06:51:11 2012 
 ```
 
+## CPIO
+CPIO (Copy in/out file archives) was originally developed as a tape backup mechanism many many years ago. It still exists across almost all Linux distributions which is why it is a popular way of compressing and archiving boot loaders.
+
+The magic number for a CPIO file has traditionally been the following:
+
+070707		cpio archive
+0143561		byte-swapped cpio archive
+
+However, I found a different header value in the version 2.11 cpio archive program:
+```
+root@kali:~/Pictures# cpio --version
+cpio (GNU cpio) 2.11
+Copyright (C) 2010 Free Software Foundation, Inc.
+```
+
+c7710108    cpio archive version 2.11
+
+```
+c7 71 01 08 65 91 a4 81 00 00 00 00 01 00 00 00  .q..e...........
+fc 5a 07 86 0e 00 00 00 00 00 63 70 69 6f 74 65  .Z........cpiote
+73 74 2e 63 70 69 6f 00 c7 71 01 08 70 90 a4 81  st.cpio..q..p...
+00 00 00 00 01 00 00 00 fc 5a 36 86 0f 00 00 00  .........Z6.....
+```
+
 
 ## Rar
 The RAR file format begins with Rar!

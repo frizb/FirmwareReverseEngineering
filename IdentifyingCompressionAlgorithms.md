@@ -165,7 +165,7 @@ CPIO (Copy in/out file archives) was originally developed as a tape backup mecha
 
 The magic number for a CPIO file has traditionally been the following:
 
-070707		cpio archive
+30 37 30 37 30     070707		cpio archive
 
 0143561		byte-swapped cpio archive
 

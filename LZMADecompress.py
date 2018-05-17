@@ -12,7 +12,7 @@ parser.add_argument("-input", metavar='file', type=str, default="file.lzma", hel
 parser.add_argument("-output", metavar='file', type=str, default="file3.out", help='Output decompressed file (default: %(default)s)')
 args = parser.parse_args()
 
-str_object1 = open(args.input, 'rb').read()
-str_object2 = lzma.decompress(str_object1)
+binary_object1 = open(args.input, 'rb').read()
+binary_object2 = lzma.decompress(binary_object1)
 with open(args.output, 'wb') as f:
-    f.write(str_object2)
+    f.write(binary_object2)

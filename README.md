@@ -78,4 +78,6 @@ In this case we need to take a good look at the binary content of the firmware i
 Getting the correct offset value for the firmware can be tricky.
 
 
-
+## References:
+A collection of great reference material
+* https://www.pentestpartners.com/security-blog/ewon-flexy-iot-router-a-deep-dive/
